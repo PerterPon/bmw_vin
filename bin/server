@@ -1,0 +1,38 @@
+#!/usr/bin/env node --harmony
+
+// require( 'coffee-script' ).register();
+
+// var Aio = require( '../lib/aio' );
+
+// new Aio;
+
+var exec = require( 'child_process' ).exec;
+
+var path = require( 'path' );
+
+var indexPath = path.join( __dirname, '../lib/index' );
+
+var command   = process.argv[ 2 ];
+
+childProcess  = null
+
+function start() {
+  if ( null !== childProcess ) {
+    try {
+      childProcess.exit();
+    } catch( e ) {}
+  }
+  childProcess = exec( 'node' + ' --harmony ' + indexPath );
+  childProcess.stdout.pipe( process.stdout );
+  childProcess.stderr.pipe( process.stderr );
+  childProcess.on( 'SIGINT', start );
+  childProcess.on( 'SIGOUT', start );
+  childProcess.on( 'exit', start );
+  childProcess.on( 'uncaughtException', start );
+}
+
+if( 'start' === command ) {
+  start();
+} else if( 'stop' === command ) {
+  process.exit();
+}

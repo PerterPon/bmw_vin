@@ -1,0 +1,66 @@
+<html>
+<head>
+  <!-- <script src='https://www.google.com/recaptcha/api.js'></script> -->
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/core.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <style type="text/css">
+  .result-box{
+    width: 90%;
+    margin: 0 auto;
+  }
+  .loading {
+    background: url( '/img/loading2.gif' ) no-repeat center center;
+    height: 20px;
+  }
+  .bmw_breadcrumb {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+  .condition-box {
+    margin-top: 20px;
+    margin-left: 5%;
+  }
+  .error {
+    color : red;
+    margin-top: 20px;
+  }
+  </style>
+</head>
+<body>
+<ol class="breadcrumb bmw_breadcrumb">
+  <li>
+    <a href="#">BMW</a>
+  </li>
+  <li class="active">车架号查询</li>
+</ol>
+<div class="condition-box">
+  <h5>请输入验证码和后7位车架号进行查询, 翻译均为机器翻译, 若有不准的地方或者BUG, 请联系PerterPon@gmail.com</h5>
+  <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"></script>
+  <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha.js"></script>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="input-group">
+        <input type="text" class="form-control" id="vin_number" placeholder="后7位车架号">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">确定</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="result-box">
+</div>
+</body>
+</html>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56202861-2', 'auto');
+  ga('send', 'pageview');
+
+</script>

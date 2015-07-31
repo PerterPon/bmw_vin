@@ -1,0 +1,26 @@
+{
+  "name": "bmw_vin",
+  "main": "",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "yamljs"          : "*",
+    "thunkify"        : "*",
+    "request"         : "*",
+    "node-cover"      : "*",
+    "coffee-script"   : "*",
+    "cover-router"    : "*",
+    "serve-static"    : "*",
+    "middleware-cube" : "*",
+    "body-parser"     : "*",
+    "cheerio"         : "*",
+    "co"              : "*"
+  },
+  "engines": {
+    "node":  ">=0.12.0"
+  },
+  "scripts": {
+    "test": "make test"
+  }
+}
