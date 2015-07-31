@@ -74,5 +74,9 @@ class Vin
 
     resData
 
+  getChallenge : ->
+    ( req, res, next ) =>
+      Request( 'http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV' ).pipe res
+
 module.exports = ( options ) ->
   new Vin options

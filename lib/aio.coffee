@@ -53,6 +53,7 @@ class Aio
 
     # vin
     vin = new Vin
-    app.use Router.post '/vin', vin.getVin()
+    app.use Router.post '/vin',       vin.getVin()
+    app.use Router.get  '/challenge', vin.getChallenge()
 
 module.exports = Aio
