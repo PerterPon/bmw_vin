@@ -1,10 +1,4 @@
-#!/usr/bin/env node --harmony
-
-// require( 'coffee-script' ).register();
-
-// var Aio = require( '../lib/aio' );
-
-// new Aio;
+#!/usr/local/bin/node --harmony
 
 var exec = require( 'child_process' ).exec;
 

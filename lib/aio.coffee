@@ -8,8 +8,6 @@
 
 "use strict"
 
-require 'yaml'
-
 path   = require 'path'
 yaml   = require 'yamljs'
 Cover  = require 'node-cover'
