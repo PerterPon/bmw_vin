@@ -14,6 +14,7 @@ cheerio  = require 'cheerio'
 urlLib   = require 'url'
 yaml     = require 'yamljs'
 path     = require 'path'
+config   = yaml.load path.join __dirname, '../../etc/config.default.yaml'
 bmwCfg   = yaml.load path.join __dirname, '../../etc/bmw.yaml'
 
 class Vin
@@ -75,8 +76,19 @@ class Vin
     resData
 
   getChallenge : ->
+    request = thunkify Request
     ( req, res, next ) =>
-      Request( 'http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV' ).pipe res
+      resData = yield request 'http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV'
+      [ trash, body ] = resData
+      body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
+      res.end body
+
+  redirectGoogle : ->
+    ( req, res, next ) =>
+      { url } = req
+      url = url.replace "/google/", ''
+      url = "http://www.google.com/recaptcha/api/#{url}"
+      Request( url ).pipe res
 
 module.exports = ( options ) ->
   new Vin options

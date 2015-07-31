@@ -33,6 +33,10 @@ class Aio
   useMiddleware : ->
     { app } = @
 
+    vin = new Vin
+    # fake
+    app.use Router.all '/google/*', vin.redirectGoogle()
+
     # middleware cube
     cubeWm = wmCube
       dir : './res'
@@ -52,7 +56,6 @@ class Aio
         res.end message
 
     # vin
-    vin = new Vin
     app.use Router.post '/vin',       vin.getVin()
     app.use Router.get  '/challenge', vin.getChallenge()
 
