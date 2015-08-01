@@ -71,7 +71,28 @@ class Vin
               cnName = bmwCfg.No[ id ]
             cnName ?= name
             cnId   ?= id
+
             resData[ itemInfo ].push { id : cnId, name : cnName }
+
+            if 'VIN long' is id.trim()
+              factory = name[ 10 ]
+              facName = ''
+              if factory in [ 'A', 'F', 'K' ]
+                facName = '德国慕尼黑'
+              else if factory in [ 'E', 'J', 'P' ]
+                facName = '德国雷根斯堡'
+              else if factory in [ 'B', 'C', 'D', 'G' ]
+                facName = '德国丁格林'
+              else if factory in [ 'L' ]
+                facName = '美国斯巴腾堡'
+              else if factory in [ 'N' ]
+                facName = '南非罗斯林'
+              else if factory in [ 'W' ]
+                facName = '奥地利Graz'
+              resData[ itemInfo ].push {
+                id   : '组装工厂'
+                name : facName
+              }
 
     resData
 
