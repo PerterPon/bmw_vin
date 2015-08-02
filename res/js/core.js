@@ -19,6 +19,7 @@ $( function() {
         try {
           resData = JSON.parse( data );
         } catch( e ) {
+          $( '.result-box' ).html( '<div class="error">当前查询通道拥挤, 请稍后重试</div>' );
           console.log( e );
         }
         if ( true === resData.wrong ) {
