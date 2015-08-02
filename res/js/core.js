@@ -37,6 +37,9 @@ $( function() {
           }
           $( '.result-box' ).append( $table );
         }
+      },
+      failure: function () {
+        $( '.result-box' ).html( '<div class="error">查询超时, 当前查询通道拥挤, 请稍后重试</div>' );
       }
     });
   } );
