@@ -8,12 +8,15 @@ VehicleId:
   "Steering"    : "方向盘位置"
   "Door count"  : "车门数量"
   "Engine"      : "发动机代号"
+  "Transmision" : "传动系统"
   "Cubical capacity" : "排量"
   "Power"       : "功率"
   "Gearbox"     : "变速器"
   "Colour"      : "颜色"
   "Upholstery"  : "内饰"
   "Prod. date"  : "生产日期"
+VehicleName:
+  "ALPINWEISS 3 (300)" : "雪山白"
 
 No:
   000 : 'Dummy-SALAPA  虚拟SALAPA'
