@@ -3,7 +3,6 @@ $( function() {
     var recaptcha_challenge_field = $( '#recaptcha_challenge_field' ).val();
     var recaptcha_response_field  = $( '#recaptcha_response_field' ).val();
     var vin_number                = $( '#vin_number' ).val();
-    $( '.result-box' ).html( '<div class="loading"></div>' );
 
     if( 7 !== vin_number.length ) {
       return alert( '车架号位数不对, 请输入后7位车架号' );
@@ -13,6 +12,7 @@ $( function() {
       return alert( '请输入验证码' );
     }
 
+    $( '.result-box' ).html( '<div class="loading"></div>' );
     $.ajax( {
       'url'    : '/vin',
       'method' : 'POST',
