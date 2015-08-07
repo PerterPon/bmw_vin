@@ -114,9 +114,7 @@ class Vin
     ( req, res, next ) =>
       { url } = req
       url = url.replace "/google/", ''
-      redirectUrl = encodeURIComponent  "http://www.google.com/recaptcha/api/#{url}"
-      url = redirectUrl
-      Request( url ).pipe res
+      Request( "http://www.google.com/recaptcha/api/#{url}" ).pipe res
 
 module.exports = ( options ) ->
   new Vin options
