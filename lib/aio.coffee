@@ -16,11 +16,16 @@ wmCube = require 'middleware-cube'
 Vin    = require './controller/vin'
 bodyParser = require 'body-parser'
 config     = yaml.load path.join __dirname, '../etc/config.default.yaml'
+DB         = require( './core/db' )()
 
 class Aio
 
   constructor : ->
+    @initDb()
     @init()
+
+  initDb : ->
+    DB.init config.mysql
 
   init : ->
     @app = Cover()
@@ -34,6 +39,10 @@ class Aio
     { app } = @
 
     vin = new Vin
+    # favicon
+    app.use Router.all '/favicon.ico', ( req, res, next ) ->
+      res.end ''
+
     # fake
     app.use Router.all '/google/*', vin.redirectGoogle()
 

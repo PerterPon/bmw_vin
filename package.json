@@ -15,7 +15,11 @@
     "middleware-cube" : "*",
     "body-parser"     : "*",
     "cheerio"         : "*",
-    "co"              : "*"
+    "co"              : "*",
+    "options-stream"  : "*",
+    "mysql"           : "*",
+    "event-pipe"      : "*",
+    "response-patch"  : "*"
   },
   "engines": {
     "node":  ">=0.12.0"

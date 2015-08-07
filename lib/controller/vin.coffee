@@ -8,6 +8,7 @@
 
 "use strict"
 
+require 'response-patch'
 thunkify = require 'thunkify'
 Request  = require 'request'
 cheerio  = require 'cheerio'
@@ -17,12 +18,16 @@ path     = require 'path'
 config   = yaml.load path.join __dirname, '../../etc/config.default.yaml'
 bmwCfg   = yaml.load path.join __dirname, '../../etc/bmw.yaml'
 
+VinModel = require '../model/vin'
+
 class Vin
 
   constructor : ( @options ) ->
+    @vinModel    = VinModel()
 
   getVin : ->
-    request = thunkify Request
+    request      = thunkify Request
+    { vinModel } = @
     ( req, res, next ) =>
       url = urlLib.format
         protocol : 'http'
@@ -35,6 +40,7 @@ class Vin
       $ = cheerio.load body
       vinData = @decodeRes $, body
       res.end JSON.stringify vinData
+      yield vinModel.addVin req.body.vin
 
   decodeRes : ( $, body ) ->
     $tables = $( '#content > table' ).not '.table1'

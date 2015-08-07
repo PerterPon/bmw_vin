@@ -1,10 +1,14 @@
 <html>
 <head>
   <title>BMW vin 宝马车架号中文查询地址</title>
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css?version=1">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <meta name=viewport content="width=device-width, initial-scale=1">
   <style type="text/css">
-  .result-box{
+  body {
     width: 90%;
+    margin: auto;
+  }
+  .result-box{
     margin: 0 auto;
   }
   .loading {
@@ -12,17 +16,17 @@
     height: 20px;
   }
   .bmw_breadcrumb {
-    width: 90%;
-    margin: 0 auto;
     margin-top: 20px;
   }
   .condition-box {
     margin-top: 20px;
-    margin-left: 5%;
   }
   .error {
     color : red;
     margin-top: 20px;
+  }
+  .vin_row {
+    width: 316px;
   }
   </style>
 </head>
@@ -41,15 +45,13 @@
   <!-- <script type="text/javascript" src="http://www.google.
   com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"></script> -->
   <script type="text/javascript" src="/challenge"></script>
-  <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha.js?version=1"></script>
-  <div class="row">
-    <div class="col-lg-3">
-      <div class="input-group">
-        <input type="text" class="form-control" id="vin_number" placeholder="后7位车架号">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">确定</button>
-        </span>
-      </div>
+  <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha.js"></script>
+  <div class="vin_row">
+    <div class="input-group">
+      <input type="text" class="form-control" id="vin_number" placeholder="后7位车架号">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">确定</button>
+      </span>
     </div>
   </div>
 </div>
@@ -67,5 +69,5 @@
   ga('send', 'pageview');
 
 </script>
-<script type="text/javascript" src="/js/jquery.js?version=1"></script>
-<script type="text/javascript" src="/js/core.js?version=1"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
