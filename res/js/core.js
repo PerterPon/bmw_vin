@@ -5,6 +5,14 @@ $( function() {
     var vin_number                = $( '#vin_number' ).val();
     $( '.result-box' ).html( '<div class="loading"></div>' );
 
+    if( 7 !== vin_number.length ) {
+      return alert( '车架号位数不对, 请输入后7位车架号' );
+    }
+
+    if ( '' === recaptcha_response_field.trim() ) {
+      return alert( '请输入验证码' );
+    }
+
     $.ajax( {
       'url'    : '/vin',
       'method' : 'POST',
