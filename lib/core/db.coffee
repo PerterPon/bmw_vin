@@ -75,8 +75,6 @@ class Db
     sql : query
 
   query : thunkify ( sql, where, cb ) ->
-    console.log '------mysql--------'
-    console.log sql, where
     @_wrapQuery sql, where, cb
 
   # 使用事务执行sql
