@@ -1,5 +1,4 @@
 $( function() {
-
   $( '.btn-default' ).on( 'click', function() {
     var recaptcha_challenge_field = $( '#recaptcha_challenge_field' ).val();
     var recaptcha_response_field  = $( '#recaptcha_response_field' ).val();

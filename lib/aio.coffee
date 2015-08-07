@@ -39,7 +39,9 @@ class Aio
 
     # middleware cube
     cubeWm = wmCube
-      dir : './res'
+      dir    : './res'
+      maxAge : 2592000000
+      cached : path.join __dirname, '../res'
     app.use Router.all '/', cubeWm.middleware()
 
     # body parser
