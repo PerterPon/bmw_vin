@@ -18,16 +18,18 @@ path     = require 'path'
 config   = yaml.load path.join __dirname, '../../etc/config.default.yaml'
 bmwCfg   = yaml.load path.join __dirname, '../../etc/bmw.yaml'
 
-VinModel = require '../model/vin'
+ResultModel = require '../model/result'
+VinModel    = require '../model/vin'
 
 class Vin
 
   constructor : ( @options ) ->
     @vinModel    = VinModel()
+    @resultModel = ResultModel();
 
   getVin : ->
     request      = thunkify Request
-    { vinModel } = @
+    { vinModel, resultModel } = @
     ( req, res, next ) =>
       url = urlLib.format
         protocol : 'http'
@@ -39,12 +41,18 @@ class Vin
       [ trash, body ] = resData
       $ = cheerio.load body
       vinData = @decodeRes $, body
+      { wrong, __original } = vinData
+      delete vinData.__original
       res.end JSON.stringify vinData
-      yield vinModel.addVin req.body.vin
+      if true isnt wrong
+        yield vinModel.addVin req.body.vin 
+        yield resultModel.addResult __original
 
   decodeRes : ( $, body ) ->
     $tables = $( '#content > table' ).not '.table1'
-    resData = {}
+    resData = {
+      __original : []
+    }
     if 0 is $tables.length
       if 0 <= body.indexOf 'Wrong captcha code. Try again.'
         return {
@@ -71,6 +79,8 @@ class Vin
           cnId   = null
           cnName = null
           unless '' in [ id, name ]
+            if 'No.' isnt id.trim()
+              resData.__original.push [ id, name ]
             if 'Vehicle information' is itemInfo
               cnId   = bmwCfg.VehicleId[ id ]
             else
@@ -99,7 +109,6 @@ class Vin
                 id   : '组装工厂'
                 name : facName
               }
-
     resData
 
   getChallenge : ->
