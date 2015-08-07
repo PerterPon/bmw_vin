@@ -105,7 +105,7 @@ class Vin
   getChallenge : ->
     request = thunkify Request
     ( req, res, next ) =>
-      resData = yield request "http://#{config.google_proxy}/?redirectUrl=http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
+      resData = yield request "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       [ trash, body ] = resData
       body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
       res.end body
@@ -115,7 +115,7 @@ class Vin
       { url } = req
       url = url.replace "/google/", ''
       redirectUrl = encodeURIComponent  "http://www.google.com/recaptcha/api/#{url}"
-      url = "http://#{config.google_proxy}/?redirectUrl=#{redirectUrl}"
+      url = redirectUrl
       Request( url ).pipe res
 
 module.exports = ( options ) ->
