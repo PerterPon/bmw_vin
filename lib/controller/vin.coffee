@@ -130,7 +130,7 @@ class Vin
       reqOption   =
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
         # headers : headers
-      resData     = yield request reqOption
+      resData     = yield request "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       [ trash, body ] = resData
       body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
       res.end body
@@ -147,7 +147,7 @@ class Vin
       reqOption =
         url     : "http://www.google.com/recaptcha/api/#{url}"
         # headers : headers
-      Request( reqOption ).pipe res
+      Request( "http://www.google.com/recaptcha/api/#{url}" ).pipe res
 
 module.exports = ( options ) ->
   new Vin options
