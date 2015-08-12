@@ -126,12 +126,10 @@ class Vin
         req.socket.remoteAddress or
         req.connection.socket.remoteAddress ).split( ':' ).pop();
       { headers } = req
-      delete headers.host
-      delete headers[ 'accept-language' ]
-      delete headers[ 'accept' ]
-      delete headers[ 'accept-encoding' ]
-      headers.referer = 'http://www.bmwvin.com'
-      headers[ 'x-forwarded-for' ] = remoteAddress
+      headers =
+        referer           : 'http://127.0.0.1'
+        'x-forwarded-for' : remoteAddress
+        'user-agent'      : headers[ 'user-agent' ]
       reqOption   =
         headers : headers
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
@@ -148,12 +146,10 @@ class Vin
       remoteAddress = ( req.connection.remoteAddress or
         req.socket.remoteAddress or
         req.connection.socket.remoteAddress ).split( ':' ).pop();
-      headers.referer = 'http://www.bmwvin.com'
-      headers[ 'x-forwarded-for' ] = remoteAddress
-      delete headers.host
-      delete headers[ 'accept-language' ]
-      delete headers[ 'accept' ]
-      delete headers[ 'accept-encoding' ]
+      headers = 
+        referer           : 'http://127.0.0.1'
+        'x-forwarded-for' : remoteAddress
+        'user-agent'      : headers[ 'user-agent' ]
       reqOption =
         headers : headers
         url     : "http://www.google.com/recaptcha/api/#{url}"
