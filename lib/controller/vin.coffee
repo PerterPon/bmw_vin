@@ -122,14 +122,9 @@ class Vin
   getChallenge : ->
     request = thunkify Request
     ( req, res, next ) =>
-      console.log req.connection.remoteAddress
-      remoteAddress = ( req.connection.remoteAddress or
-        req.socket.remoteAddress or
-        req.connection.socket.remoteAddress ).split( ':' ).pop();
       { headers } = req
       delete headers.referer
-      headers[ 'x-forwarded-for' ] = remoteAddress
-      console.log remoteAddress
+      headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption   =
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       resData     = yield request reqOption
@@ -142,12 +137,8 @@ class Vin
       { url } = req
       url = url.replace "/google/", ''
       { headers } = req
-      remoteAddress = ( req.connection.remoteAddress or
-        req.socket.remoteAddress or
-        req.connection.socket.remoteAddress ).split( ':' ).pop();
       delete headers.referer
-      headers[ 'x-forwarded-for' ] = remoteAddress
-      console.log remoteAddress
+      headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption =
         url     : "http://www.google.com/recaptcha/api/#{url}"
       Request( reqOption ).pipe res
