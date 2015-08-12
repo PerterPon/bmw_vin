@@ -126,8 +126,9 @@ class Vin
         req.socket.remoteAddress or
         req.connection.socket.remoteAddress ).split( ':' ).pop();
       { headers } = req
-      headers =
-        referer           : 'http://www.bmwvin.com'
+      delete headers.referer
+      headers[ 'x-forwarded-for' ] = remoteAddress
+      console.log remoteAddress
       reqOption   =
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       resData     = yield request reqOption
@@ -143,8 +144,9 @@ class Vin
       remoteAddress = ( req.connection.remoteAddress or
         req.socket.remoteAddress or
         req.connection.socket.remoteAddress ).split( ':' ).pop();
-      headers = 
-        referer           : 'http://www.bmwvin.com'
+      delete headers.referer
+      headers[ 'x-forwarded-for' ] = remoteAddress
+      console.log remoteAddress
       reqOption =
         url     : "http://www.google.com/recaptcha/api/#{url}"
       Request( reqOption ).pipe res
