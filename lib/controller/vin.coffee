@@ -125,6 +125,7 @@ class Vin
       { headers } = req
       delete headers.host
       delete headers.referer
+      delete headers[ 'accept-encoding' ]
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption   =
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
@@ -141,6 +142,7 @@ class Vin
       { headers } = req
       delete headers.host
       delete headers.referer
+      delete headers[ 'accept-encoding' ]
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption =
         url     : "http://www.google.com/recaptcha/api/#{url}"
