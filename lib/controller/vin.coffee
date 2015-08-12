@@ -129,7 +129,6 @@ class Vin
       headers =
         referer           : 'http://www.bmwvin.com'
       reqOption   =
-        headers : headers
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       resData     = yield request reqOption
       [ trash, body ] = resData
@@ -147,7 +146,6 @@ class Vin
       headers = 
         referer           : 'http://www.bmwvin.com'
       reqOption =
-        headers : headers
         url     : "http://www.google.com/recaptcha/api/#{url}"
       Request( reqOption ).pipe res
 
