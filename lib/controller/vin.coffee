@@ -122,7 +122,7 @@ class Vin
   getChallenge : ->
     request = thunkify Request
     ( req, res, next ) =>
-      console.log req.connection, req.socket
+      console.log req.connection.remoteAddress
       remoteAddress = ( req.connection.remoteAddress or
         req.socket.remoteAddress or
         req.connection.socket.remoteAddress ).split( ':' ).pop();
