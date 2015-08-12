@@ -128,7 +128,6 @@ class Vin
       { headers } = req
       headers =
         referer           : 'http://127.0.0.1'
-        'x-forwarded-for' : remoteAddress
         'user-agent'      : headers[ 'user-agent' ]
       reqOption   =
         headers : headers
@@ -148,7 +147,6 @@ class Vin
         req.connection.socket.remoteAddress ).split( ':' ).pop();
       headers = 
         referer           : 'http://127.0.0.1'
-        'x-forwarded-for' : remoteAddress
         'user-agent'      : headers[ 'user-agent' ]
       reqOption =
         headers : headers
