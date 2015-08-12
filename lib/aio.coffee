@@ -8,6 +8,8 @@
 
 "use strict"
 
+require 'response-patch'
+
 path   = require 'path'
 yaml   = require 'yamljs'
 Cover  = require 'node-cover'
@@ -60,6 +62,7 @@ class Aio
     # error hander
     app.use ( req, res, next ) ->
       try
+        res.req = req
         yield next
       catch e
         { message, stack } = e

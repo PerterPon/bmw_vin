@@ -20,7 +20,6 @@ ADD_RESULT  = """
 class Result
 
   addResult : ( result ) ->
-    console.log 11111
     yield db.query ADD_RESULT, [ result ]
 
 module.exports = ->

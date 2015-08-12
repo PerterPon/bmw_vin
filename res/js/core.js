@@ -1,3 +1,12 @@
+
+/*
+  core
+  Author: PerterPon<PerterPon@gmail.com>
+  Create: Sat Aug 08 2015 07:45:58 GMT+0800 (CST)
+*/
+
+"use strict";
+
 $( function() {
   $( '.btn-default' ).on( 'click', function() {
     var recaptcha_challenge_field = $( '#recaptcha_challenge_field' ).val();
@@ -23,24 +32,28 @@ $( function() {
       },
       'success' : function ( data ) {
         $( '.result-box' ).html( '' );
-        try {
-          resData = JSON.parse( data );
-        } catch( e ) {
+        if ( 'object' !== typeof data ) {
           $( '.result-box' ).html( '<div class="error">当前查询通道拥挤, 请稍后重试</div>' );
-          console.log( e );
+          return;
         }
-        if ( true === resData.wrong ) {
-          $( '.result-box' ).html( '<div class="error">'+ resData.msg +'</div>' );
+        if ( true === data.wrong ) {
+          $( '.result-box' ).html( '<div class="error">'+ data.msg +'</div>' );
           return;
         }
 
-        for( var item in resData ) {
-          var itemData = resData[ item ];
+        for( var item in data ) {
+          var itemData = data[ item ];
           $( '.result-box' ).append( '<h3>' + item + '</h3>' );
-          $table = $( '<table class="table .table-striped"></table>' );
+          var $table = $( '<table class="table .table-striped"></table>' );
           for( var i = 0; i < itemData.length; i ++ ) {
             var tr = itemData[ i ];
-            $table.append( '<tr><td>' + tr.id + '</td><td>' + tr.name + '</td></tr>' );
+            var content = null;
+            if ( tr.name && tr.en_name ) {
+              content   = tr.name + ' (' + tr.en_name + ')';
+            } else {
+              content   = tr.name || tr.en_name;
+            }
+            $table.append( '<tr><td>' + ( tr.id || tr.en_id ) + '</td><td>' + content + '</td></tr>' );
           }
           $( '.result-box' ).append( $table );
         }

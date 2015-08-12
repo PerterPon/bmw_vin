@@ -12,15 +12,15 @@ db = require( '../core/db' )()
 
 ADD_VIN  = """
 INSERT INTO vin
-  ( vin_code )
+  ( vin_code, wrong )
 VALUE
-  ( ? );
+  ( ?, ? );
 """
 
 class Vin
 
-  addVin : ( vin ) ->
-    yield db.query ADD_VIN, [ vin ]
+  addVin : ( vin, wrong ) ->
+    yield db.query ADD_VIN, [ vin, wrong ]
 
 module.exports = ->
   new Vin

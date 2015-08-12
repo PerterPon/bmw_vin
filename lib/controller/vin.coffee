@@ -18,18 +18,20 @@ path     = require 'path'
 config   = yaml.load path.join __dirname, '../../etc/config.default.yaml'
 bmwCfg   = yaml.load path.join __dirname, '../../etc/bmw.yaml'
 
-ResultModel = require '../model/result'
-VinModel    = require '../model/vin'
+ResultModel  = require '../model/result'
+VinModel     = require '../model/vin'
+MissingModel = require '../model/missing'
 
 class Vin
 
   constructor : ( @options ) ->
-    @vinModel    = VinModel()
-    @resultModel = ResultModel();
+    @vinModel     = VinModel()
+    @resultModel  = ResultModel()
+    @missingModel = MissingModel()
 
   getVin : ->
     request      = thunkify Request
-    { vinModel, resultModel } = @
+    { vinModel, resultModel, missingModel } = @
     ( req, res, next ) =>
       url = urlLib.format
         protocol : 'http'
@@ -41,17 +43,22 @@ class Vin
       [ trash, body ] = resData
       $ = cheerio.load body
       vinData = @decodeRes $, body
-      { wrong, __original } = vinData
+
+      { wrong, __original, __missing } = vinData
       delete vinData.__original
-      res.end JSON.stringify vinData
+      delete vinData.__missing
+
+      res.send vinData
+      yield vinModel.addVin req.body.vin, Boolean( wrong )
       if true isnt wrong
-        yield vinModel.addVin req.body.vin 
-        yield resultModel.addResult __original
+        yield resultModel.addResult __original if __original.length
+        yield missingModel.addMissing __missing if __missing.length
 
   decodeRes : ( $, body ) ->
     $tables = $( '#content > table' ).not '.table1'
     resData = {
       __original : []
+      __missing  : []
     }
     if 0 is $tables.length
       if 0 <= body.indexOf 'Wrong captcha code. Try again.'
@@ -85,10 +92,11 @@ class Vin
               cnId   = bmwCfg.VehicleId[ id ]
             else
               cnName = bmwCfg.No[ id ]
-            cnName ?= name
-            cnId   ?= id
 
-            resData[ itemInfo ].push { id : cnId, name : cnName }
+            if not cnName or not cnId
+              resData.__missing.push [ id, name ]
+
+            resData[ itemInfo ].push { id : cnId, name : cnName, en_name : name, en_id : id }
 
             if 'VIN long' is id.trim()
               factory = name[ 10 ]
@@ -114,7 +122,20 @@ class Vin
   getChallenge : ->
     request = thunkify Request
     ( req, res, next ) =>
-      resData = yield request "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
+      remoteAddress = ( req.connection.remoteAddress or
+        req.socket.remoteAddress or
+        req.connection.socket.remoteAddress ).split( ':' ).pop();
+      { headers } = req
+      delete headers.host
+      delete headers[ 'accept-language' ]
+      delete headers[ 'accept' ]
+      delete headers[ 'accept-encoding' ]
+      headers.referer = 'http://www.bmwvin.com'
+      headers[ 'x-forwarded-for' ] = remoteAddress
+      reqOption   =
+        headers : headers
+        url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
+      resData     = yield request reqOption
       [ trash, body ] = resData
       body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
       res.end body
@@ -123,7 +144,20 @@ class Vin
     ( req, res, next ) =>
       { url } = req
       url = url.replace "/google/", ''
-      Request( "http://www.google.com/recaptcha/api/#{url}" ).pipe res
+      { headers } = req
+      remoteAddress = ( req.connection.remoteAddress or
+        req.socket.remoteAddress or
+        req.connection.socket.remoteAddress ).split( ':' ).pop();
+      headers.referer = 'http://www.bmwvin.com'
+      headers[ 'x-forwarded-for' ] = remoteAddress
+      delete headers.host
+      delete headers[ 'accept-language' ]
+      delete headers[ 'accept' ]
+      delete headers[ 'accept-encoding' ]
+      reqOption =
+        headers : headers
+        url     : "http://www.google.com/recaptcha/api/#{url}"
+      Request( reqOption ).pipe res
 
 module.exports = ( options ) ->
   new Vin options
