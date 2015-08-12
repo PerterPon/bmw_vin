@@ -129,7 +129,7 @@ class Vin
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption   =
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
-        headers : headers
+        # headers : headers
       resData     = yield request reqOption
       [ trash, body ] = resData
       body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
@@ -146,7 +146,7 @@ class Vin
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption =
         url     : "http://www.google.com/recaptcha/api/#{url}"
-        headers : headers
+        # headers : headers
       Request( reqOption ).pipe res
 
 module.exports = ( options ) ->
