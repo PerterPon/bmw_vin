@@ -123,6 +123,7 @@ class Vin
     request = thunkify Request
     ( req, res, next ) =>
       { headers } = req
+      delete headers.host
       delete headers.referer
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption   =
@@ -138,6 +139,7 @@ class Vin
       { url } = req
       url = url.replace "/google/", ''
       { headers } = req
+      delete headers.host
       delete headers.referer
       headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
       reqOption =
