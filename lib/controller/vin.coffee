@@ -128,7 +128,6 @@ class Vin
       { headers } = req
       headers =
         referer           : 'http://127.0.0.1'
-        'user-agent'      : headers[ 'user-agent' ]
       reqOption   =
         headers : headers
         url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
@@ -147,7 +146,6 @@ class Vin
         req.connection.socket.remoteAddress ).split( ':' ).pop();
       headers = 
         referer           : 'http://127.0.0.1'
-        'user-agent'      : headers[ 'user-agent' ]
       reqOption =
         headers : headers
         url     : "http://www.google.com/recaptcha/api/#{url}"
