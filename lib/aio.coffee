@@ -71,6 +71,7 @@ class Aio
 
     # vin
     app.use Router.post '/vin',       vin.getVin()
+    app.use Router.post '/cache',     vin.getCache()
     app.use Router.get  '/challenge', vin.getChallenge()
 
 module.exports = Aio

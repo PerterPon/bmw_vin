@@ -4,7 +4,7 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <meta name="keywords" content="宝马,BMW,车架号,中文">
   <meta name="description" content="宝马中文车架号查询系统, 包括华晨宝马、MINI、劳斯莱斯。">
-  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >
   <style type="text/css">
   body {
     width: 90%;
@@ -33,6 +33,11 @@
   #cnzz_stat_icon_1256008288 {
     display: none;
   }
+  #secury_code_iframe {
+    border: none;
+    width: 315px;
+    height: 126px;
+  }
   </style>
 </head>
 <body>
@@ -44,8 +49,8 @@
   <li class="active">车架号查询</li>
 </ol>
 <div class="condition-box">
-  <h5>请输入验证码和后7位车架号进行查询, 已开始人工翻译, 我会按照大家查询到最多配置开始翻译, 有问题请联系PerterPon@gmail.com</h5>
-  <h5>如果验证码看不清楚或者变成了一串英文"we're sorry....", 点击验证码图片边上的刷新按钮即可。实在看不清楚可以选择语音验证码, 都是一些简单的英文数字.</h5>
+  <h5>当查询量大时, 验证码就会变得非常鬼畜, 现在已经开启缓存, 当没有缓存时才需要输入验证码从官方渠道获取车架号信息, 从而减少查询量.</h5>
+  <h5>有任何问题或者建议, 请随时联系PerterPon@gmail.com</h5>
   <div class="vin_row">
     <div class="input-group">
       <input type="text" class="form-control" id="vin_number" placeholder="后7位车架号">
@@ -55,13 +60,13 @@
     </div>
   </div>
 </div>
-<div class="securitycode">
-</div>
 <div class="result-box">
+</div>
+<div class="securitycode">
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/core.js" async="async"></script>
 </div>
 </body>
 </html>
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/core.js"></script>
-<script type="text/javascript" src="/challenge"></script>
+<!-- <script type="text/javascript" src="/challenge"></script> -->
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1256008288'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1256008288' type='text/javascript'%3E%3C/script%3E"));</script>

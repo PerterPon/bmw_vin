@@ -29,6 +29,21 @@ class Vin
     @resultModel  = ResultModel()
     @missingModel = MissingModel()
 
+  getCache : ->
+    request      = thunkify Request
+    { resultModel } = @
+    ( req, res, next ) =>
+      { vin }    = req.body
+      cachedData = yield resultModel.getCache vin
+      if 0 is cachedData.length
+        res.send '', 404
+      else
+        ayData   = []
+        for { code, en_name } in cachedData
+          ayData.push [ code, en_name ] 
+        cnData   = @_translate ayData
+        res.send cnData
+
   getVin : ->
     request      = thunkify Request
     { vinModel, resultModel, missingModel } = @
@@ -38,28 +53,28 @@ class Vin
         hostname : 'www.bmwvin.com'
         query    : req.body
 
+      { vin } = req.body
+
       resData = yield request url
 
       [ trash, body ] = resData
-      $ = cheerio.load body
-      vinData = @decodeRes $, body
+      $          = cheerio.load body
+      parsedData = @decodeRes $, body, vin
+      { wrong }  = parsedData
 
-      { wrong, __original, __missing } = vinData
-      delete vinData.__original
-      delete vinData.__missing
-
-      res.send vinData
-      yield vinModel.addVin req.body.vin, Boolean( wrong )
       if true isnt wrong
-        yield resultModel.addResult __original if __original.length
-        yield missingModel.addMissing __missing if __missing.length
+        cnData   = @_translate parsedData
 
-  decodeRes : ( $, body ) ->
+      res.send cnData or parsedData
+
+      yield vinModel.addVin vin, Boolean( wrong )
+      if true isnt wrong
+        yield resultModel.addResult parsedData
+        # yield missingModel.addMissing __missing if __missing.length
+
+  decodeRes : ( $, body, vin ) ->
     $tables = $( '#content > table' ).not '.table1'
-    resData = {
-      __original : []
-      __missing  : []
-    }
+    parsedData = []
     if 0 is $tables.length
       if 0 <= body.indexOf 'Wrong captcha code. Try again.'
         return {
@@ -76,60 +91,59 @@ class Vin
         $table = $tables.eq i
         $trs   = $ 'tr', $table
         itemInfo = $trs.eq( 0 ).find( 'td' ).eq( 1 ).text()
-        resData[ itemInfo ] = []
+        parsedData.push [ '__item_name__', itemInfo, vin ]
         for tr, j in $trs
           continue if 0 is j
           $tr  = $trs.eq j
           continue if 2 is $tr.find( 'td' ).length
           id   = $tr.find( 'td' ).eq( 1 ).text().trim()
           name = $tr.find( 'td' ).eq( 2 ).text().trim()
-          cnId   = null
-          cnName = null
-          unless '' in [ id, name ]
-            if 'No.' isnt id.trim()
-              resData.__original.push [ id, name ]
-            if 'Vehicle information' is itemInfo
-              cnId   = bmwCfg.VehicleId[ id ]
-            else
-              cnName = bmwCfg.No[ id ]
+          parsedData.push [ id, name, vin ]
+    parsedData
 
-            if not cnName or not cnId
-              resData.__missing.push [ id, name ]
+  _translate : ( data ) ->
+    resData  = {}
+    itemName = null
+    for [ id, name ] in data
+      if '__item_name__' is id
+        itemName = name
+        resData[ itemName ] = []
+        continue
+      cnId   = null
+      cnName = null
+      # if 'No.' isnt id.trim()
+      #   resData.__original.push [ id, name ]
+      if 'Vehicle information' is itemName
+        cnId   = bmwCfg.VehicleId[ id ]
+      else
+        cnName = bmwCfg.No[ id ]
 
-            resData[ itemInfo ].push { id : cnId, name : cnName, en_name : name, en_id : id }
+      resData[ itemName ].push { id : cnId, name : cnName, en_name : name, en_id : id }
 
-            if 'VIN long' is id.trim()
-              factory = name[ 10 ]
-              facName = ''
-              if factory in [ 'A', 'F', 'K' ]
-                facName = '德国慕尼黑'
-              else if factory in [ 'E', 'J', 'P' ]
-                facName = '德国雷根斯堡'
-              else if factory in [ 'B', 'C', 'D', 'G' ]
-                facName = '德国丁格林'
-              else if factory in [ 'L' ]
-                facName = '美国斯巴腾堡'
-              else if factory in [ 'N' ]
-                facName = '南非罗斯林'
-              else if factory in [ 'W' ]
-                facName = '奥地利Graz'
-              resData[ itemInfo ].push {
-                id   : '组装工厂'
-                name : facName
-              }
+      if 'VIN long' is id.trim()
+        factory   = name[ 10 ]
+        facName   = ''
+        if factory in [ 'A', 'F', 'K' ]
+          facName = '德国慕尼黑'
+        else if factory in [ 'E', 'J', 'P' ]
+          facName = '德国雷根斯堡'
+        else if factory in [ 'B', 'C', 'D', 'G' ]
+          facName = '德国丁格林'
+        else if factory in [ 'L' ]
+          facName = '美国斯巴腾堡'
+        else if factory in [ 'N' ]
+          facName = '南非罗斯林'
+        else if factory in [ 'W' ]
+          facName = '奥地利Graz'
+        resData[ itemName ].push
+          id   : '组装工厂'
+          name : facName
+
     resData
 
   getChallenge : ->
     request = thunkify Request
     ( req, res, next ) =>
-      { headers } = req
-      delete headers.host
-      delete headers.referer
-      delete headers[ 'accept-encoding' ]
-      headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
-      reqOption   =
-        url     : "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
-        # headers : headers
       resData     = yield request "http://www.google.com/recaptcha/api/challenge?k=6Ldlev8SAAAAAF4fPVvI5c4IPSfhuDZp6_HR-APV"
       [ trash, body ] = resData
       body = body.replace( 'http://www.google.com/recaptcha/api/', "#{config.domain}/google/" );
@@ -139,14 +153,6 @@ class Vin
     ( req, res, next ) =>
       { url } = req
       url = url.replace "/google/", ''
-      { headers } = req
-      delete headers.host
-      delete headers.referer
-      delete headers[ 'accept-encoding' ]
-      headers[ 'x-forwarded-for' ] = headers[ 'x-real-ip' ]
-      reqOption =
-        url     : "http://www.google.com/recaptcha/api/#{url}"
-        # headers : headers
       Request( "http://www.google.com/recaptcha/api/#{url}" ).pipe res
 
 module.exports = ( options ) ->
