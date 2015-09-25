@@ -41,6 +41,9 @@
   .ds-meta {
     display: none;
   }
+  .force_update {
+    margin-left: 5px;
+  }
   </style>
 </head>
 <body>
@@ -52,8 +55,8 @@
   <li class="active">车架号查询</li>
 </ol>
 <div class="condition-box">
-  <h5>当查询量大时, 验证码就会变得非常鬼畜, 现在已经开启缓存, 当没有缓存时才需要输入验证码从官方渠道获取车架号信息, 从而减少查询量.</h5>
-  <h5>有任何问题或者建议, 请随时联系PerterPon@gmail.com</h5>
+  <h5>当查询到的生产日期是"0001-01-01"时，代表车还未生产，所以这个时候是拿不到生产日期的，可以点击"强制更新按钮"，输入验证码就可以更新了，请勿频繁更新。</h5>
+  <h5>看不到验证码的朋友，可能是浏览器兼容性问题，目前仅在chrome测试。另外验证码复杂的问题，目前暂时还没有解。</h5>
   <div class="vin_row">
     <div class="input-group">
       <input type="text" class="form-control" id="vin_number" placeholder="后7位车架号">
