@@ -135,6 +135,8 @@ class Vin
           facName = '南非罗斯林'
         else if factory in [ 'W' ]
           facName = '奥地利Graz'
+        else
+          facName = '中国或其他地区'
         resData[ itemName ].push
           id   : '组装工厂'
           name : facName
