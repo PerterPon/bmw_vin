@@ -128,7 +128,7 @@ class Vin
         else if factory in [ 'E', 'J', 'P' ]
           facName = '德国雷根斯堡'
         else if factory in [ 'B', 'C', 'D', 'G' ]
-          facName = '德国丁格林'
+          facName = '德国丁格芬'
         else if factory in [ 'L' ]
           facName = '美国斯巴腾堡'
         else if factory in [ 'N' ]
